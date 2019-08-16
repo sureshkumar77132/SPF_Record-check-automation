@@ -1,0 +1,42 @@
+# Python 2.x example
+import requests as r 
+from bs4 import BeautifulSoup as b
+import sys
+import re
+import pandas
+list12=[]
+nospf=[]
+twospf=[]
+url = 'http://spf.myisp.ch/'
+data=pandas.read_csv('b.csv', usecols=['content'])
+df=data['content'].values.tolist()
+mylist=list(dict.fromkeys(df))
+for i in mylist:
+     payload={'host':i}
+     data=r.post(url,params=payload)
+     response=data.text
+     find1=re.findall(r'No\s*SPF\s*records\s*found',response)
+     find2=re.findall(r'The\s*host\s*has\s*2\s*TXT\s*or\s*SPF\s*records',response)
+     if(find1):
+     	nospf.append(i)
+     elif(find2):
+     	twospf.append(i)
+
+print("No spf Record Found:")
+for j in nospf:
+
+	print(j)
+print("Two Spf record Found:")
+for z in twospf:
+	print(z)
+
+
+
+
+
+
+
+
+
+
+
